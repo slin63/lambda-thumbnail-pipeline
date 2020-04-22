@@ -1,29 +1,11 @@
 # https://boto3.amazonaws.com/v1/documentation/api/latest/guide/s3-uploading-files.html
-
 import boto3
-import sys
-import logging
 
 from helpers.progress import ProgressPercentage
 from helpers import botoutils as bu
-from helpers import images
-from pprint import pprint
+from helpers import images, logging
 
-
-formatter = logging.Formatter(
-    fmt="%(asctime)s %(levelname)-8s %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
-)
-handler = logging.FileHandler("log.txt", mode="w")
-handler.setFormatter(formatter)
-screen_handler = logging.StreamHandler(stream=sys.stdout)
-screen_handler.setFormatter(formatter)
-logger = logging.getLogger("process_images")
-logger.setLevel(logging.DEBUG)
-logger.addHandler(handler)
-logger.addHandler(screen_handler)
-
-logging = logger
+logger = logging.get_logger("process_images")
 
 
 class CONST:
@@ -36,7 +18,7 @@ class CONST:
     TEMP = "tmp/"
 
 
-logging.info(
+logger.info(
     f"Checking for images in '{CONST.BUCKET}/{CONST.UNPROCESSED}'"
 )
 
@@ -62,7 +44,7 @@ to_process = list(
 # Track directory objects to clean up at the end.
 directories = []
 
-logging.info(
+logger.info(
     f"{len(to_process)} objects found to process (including images, text, and directories)"
 )
 
@@ -90,12 +72,12 @@ for obj in to_process:
     if not is_image:
         out = f"{CONST.IMAGES}{album_name}/{filename}"
         bu.move_object(s3r, CONST.BUCKET, obj["Key"], out)
-        logging.info(
+        logger.info(
             f"Moving non-image file {obj['Key']} to {out}"
         )
         continue
 
-    logging.debug(
+    logger.debug(
         f"Processing {s3path}. [is_image={is_image}] [is_directory={is_directory}]"
     )
 
@@ -135,11 +117,11 @@ for obj in to_process:
             f"{CONST.IMAGES}{album_name}/{filename}",
         )
 
-        logging.info(
+        logger.info(
             f"Successfully generated thumbnail and moved {s3path}."
         )
 
 # Clear empty directories
 for d in directories:
     s3r.Object(CONST.BUCKET, d["Key"]).delete()
-    logging.info(f"Deleted directory: {d['Key']}")
+    logger.info(f"Deleted directory: {d['Key']}")
