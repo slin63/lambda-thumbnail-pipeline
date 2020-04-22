@@ -41,6 +41,8 @@ def lambda_handler(event, context):
         # - On thumbnail success, move original out
         #     of images/unprocessed/album_name into images/album_name/file.ext
         # - If image, upload thumbnail to images/album_name/image_thumb.jpg
+        logger.info(f"{len(records)} files to process")
+
         for s3record in records:
             bucket = s3record["s3"]["bucket"]["name"]
             s3_obj_key = s3record["s3"]["object"]["key"]

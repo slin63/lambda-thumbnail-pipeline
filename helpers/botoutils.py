@@ -38,7 +38,7 @@ def process_file(
     # It's a description. Just move it to images/album_name
     if not is_image:
         out = f"{CONST.IMAGES}{album_name}/{filename}"
-        bu.move_object(s3r, bucket, s3_obj_key, out)
+        move_object(s3r, bucket, s3_obj_key, out)
         logger.info(
             f"Moving non-image file {obj['Key']} to {out}"
         )
@@ -90,4 +90,4 @@ def process_file(
             f"Successfully generated thumbnail and moved {s3path}."
         )
 
-        return True
+    return True
