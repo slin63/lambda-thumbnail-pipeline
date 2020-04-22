@@ -6,8 +6,25 @@
 ## Preparing repository for lambda
 from [here](https://aws.amazon.com/premiumsupport/knowledge-center/build-python-lambda-deployment-package/)
 ```
-./lambdify.sh
+# Make temp directory
+cp -R . ../temp/ && cd ../temp
+
+# Install dependencies to function project
+pip install -r requirements.txt -t ./
+
+# Add permissions
+chmod -R 755 ./
+
+# Build deployment package
+rm ../thumbs-lambda.zip
+zip -r ../thumbs-lambda.zip . -x '*.git*' -x 'env/*'
+
+# Verify deployment package
+unzip -l ../thumbs-lambda.zip
 ```
+Make sure to use the Pillow 7.1.1 layer from [Klayers](https://github.com/keithrozario/Klayers/blob/master/deployments/python3.7/arns/us-east-1.csv).
+`arn:aws:lambda:us-east-1:113088814899:layer:Klayers-python37-Pillow:10`
+
 ## Configuring .env
 ```
 # Prefix of files in folders to be processed
@@ -28,4 +45,4 @@ export TEMP=tmp/
 
 #### Running
 1. `source env/bin/activate`
-1. `source .env && python process_images_lambda.py`
+1. `source .env.default && python process_images_lambda.py`

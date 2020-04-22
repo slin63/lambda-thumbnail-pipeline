@@ -1,3 +1,5 @@
+from json import dumps
+
 body = {
     "Records": [
         {
@@ -27,7 +29,7 @@ body = {
                     "arn": "arn:aws:s3:::knoppers.icu",
                 },
                 "object": {
-                    "key": "images/unprocessed/hehe/1_thumbs(1).jpg",
+                    "key": "images/unprocessed/spring/DSC_3942.jpg",
                     "size": 1227,
                     "eTag": "cdd580c254b3999e0a3af7d0cbe3d08a",
                     "sequencer": "005EA0580AE200DB88",

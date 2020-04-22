@@ -2,7 +2,8 @@ boto3==1.12.43
 botocore==1.15.43
 docutils==0.15.2
 jmespath==0.9.5
-Pillow==7.1.1
+numpy==1.18.3
+opencv-python==4.2.0.34
 python-dateutil==2.8.1
 s3transfer==0.3.3
 six==1.14.0

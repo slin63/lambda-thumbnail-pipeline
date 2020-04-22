@@ -60,7 +60,9 @@ def process_file(
         )
 
         # Convert to thumbnail
-        if not images.to_thumbnail(f, C.THUMB_SIZE):
+        if not images.to_thumbnail(
+            temp_file_thumbs_name, CONST.THUMB_SIZE
+        ):
             raise Exception(
                 f"Thumbnail conversion failed for {f.name}!"
             )
