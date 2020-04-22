@@ -1,23 +1,21 @@
 # https://boto3.amazonaws.com/v1/documentation/api/latest/guide/s3-uploading-files.html
 import boto3
+import os
 
 from helpers.progress import ProgressPercentage
 from helpers import botoutils as bu
 from helpers import images, logging
 
-logger = logging.get_logger("process_images")
-
 
 class CONST:
-    BUCKET = "knoppers.icu"
-    UNPROCESSED = "images/unprocessed/"
-    IMAGES = "images/"
-    TEST_TXT = "requirements.txt"
-    TEST_IMG = "1.jpg"
+    BUCKET = str(os.getenv("BUCKET"))
+    UNPROCESSED = str(os.getenv("UNPROCESSED"))
+    IMAGES = str(os.getenv("IMAGES"))
+    TEMP = str(os.getenv("TEMP"))
     IMAGE_EXTENSIONS = ["jpg", "jpeg"]
-    TEMP = "tmp/"
 
 
+logger = logging.get_logger("process_images")
 logger.info(
     f"Checking for images in '{CONST.BUCKET}/{CONST.UNPROCESSED}'"
 )
@@ -106,7 +104,7 @@ for obj in to_process:
             f,
             CONST.BUCKET,
             f"{CONST.IMAGES}{album_name}/{filename_thumbs}",
-            Callback=ProgressPercentage(CONST.TEST_TXT),
+            Callback=ProgressPercentage(f.name),
         )
 
         # Move original image to images/album_name/image.jpg, removing it from images/raw/

@@ -7,7 +7,7 @@ def get_logger(name):
         fmt="%(asctime)s %(levelname)s - %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
     )
-    handler = logging.FileHandler("log.txt", mode="w")
+    handler = logging.FileHandler(f"{name}.log", mode="w")
     handler.setFormatter(formatter)
     screen_handler = logging.StreamHandler(
         stream=sys.stdout
