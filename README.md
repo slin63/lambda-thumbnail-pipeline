@@ -5,15 +5,16 @@
 
 ## Preparing repository for lambda
 from [here](https://aws.amazon.com/premiumsupport/knowledge-center/build-python-lambda-deployment-package/)
-1. Install dependencies to function project
-    - `pip install -r requirements.txt -t ./`
-1. Add permissions
-    - `chmod -R 755 .`
-1. Build deployment package
-    - `zip -r ../thumbs-lambda.zip .`
-1. Verify deployment package
-    - `unzip -l ../thumbs-lambda.zip`
-
+```
+# Install dependencies to function project
+pip install -r requirements.txt -t ./
+# Add permissions
+chmod -R 755 .
+# Build deployment package
+zip -r ../thumbs-lambda.zip . -x '*.git*' -x 'env/*'
+# Verify deployment package
+unzip -l ../thumbs-lambda.zip
+```
 ## Configuring .env
 ```
 # Prefix of files in folders to be processed

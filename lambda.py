@@ -1,3 +1,4 @@
+# Processes images and generates thumbnails for them.
 import os
 import boto3
 
@@ -11,6 +12,7 @@ class C:
     UNPROCESSED = str(os.getenv("UNPROCESSED"))
     IMAGES = str(os.getenv("IMAGES"))
     TEMP = str(os.getenv("TEMP"))
+    THUMB_SIZE = int(os.getenv("THUMB_SIZE"))
     IMAGE_EXTENSIONS = ["jpg", "jpeg"]
 
 
