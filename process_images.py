@@ -1,6 +1,7 @@
 # https://boto3.amazonaws.com/v1/documentation/api/latest/guide/s3-uploading-files.html
 import boto3
 import os
+import glob
 
 from helpers.progress import ProgressPercentage
 from helpers import botoutils as bu
@@ -123,3 +124,11 @@ for obj in to_process:
 for d in directories:
     s3r.Object(CONST.BUCKET, d["Key"]).delete()
     logger.info(f"Deleted directory: {d['Key']}")
+
+# Clear tmp/*
+files = glob.glob(f"{CONST.TEMP}/*")
+logger.info(
+    f"Removing {len(files)} files from {CONST.TEMP}"
+)
+for f in files:
+    os.remove(f)
