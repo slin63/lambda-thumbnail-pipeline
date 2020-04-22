@@ -1,7 +1,9 @@
 import os
 
+from json import dumps
 from helpers import images
 from helpers.progress import ProgressPercentage
+from botocore import exceptions
 
 
 def move_object(s3, bucket, old, new):
@@ -38,9 +40,16 @@ def process_file(
     # It's a description. Just move it to images/album_name
     if not is_image:
         out = f"{CONST.IMAGES}{album_name}/{filename}"
-        move_object(s3r, bucket, s3_obj_key, out)
+        try:
+            move_object(s3r, bucket, s3_obj_key, out)
+        except exceptions.ClientError as exc:
+            if exc.response["Error"]["Code"] == "NoSuchKey":
+                logger.info(
+                    f"{s3path} not found. Message might be stale. Skipping"
+                )
+                return True
         logger.info(
-            f"Moving non-image file {obj['Key']} to {out}"
+            f"Moving non-image file {filename} to {out}"
         )
         return True
 
@@ -55,9 +64,16 @@ def process_file(
 
     # Download file
     with open(temp_file_thumbs_name, "wb+") as f:
-        s3.download_fileobj(
-            bucket, s3path, f,
-        )
+        try:
+            s3.download_fileobj(
+                bucket, s3path, f,
+            )
+        except exceptions.ClientError as exc:
+            if exc.response["Error"]["Code"] == "404":
+                logger.info(
+                    f"{s3path} not found. Message might be stale. Skipping"
+                )
+                return True
 
         # Convert to thumbnail
         if not images.to_thumbnail(
