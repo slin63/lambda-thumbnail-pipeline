@@ -9,6 +9,8 @@ from [here](https://aws.amazon.com/premiumsupport/knowledge-center/build-python-
 # Make temp directory
 cp -R . ../temp/ && cd ../temp
 
+pip install -r requirements.deploy -t ./
+
 # Add permissions
 chmod -R 755 ./
 

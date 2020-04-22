@@ -29,9 +29,12 @@ def lambda_handler(event, context):
     for message in event["Records"]:
         records = loads(message["body"]).get("Records")
         if not records:
-            raise Exception(
-                f"No S3 records for this messageId {message['messageId']}"
-            )
+            return {
+                "statusCode": 200,
+                "body": dumps(
+                    f"No S3 records for this messageId {message['messageId']}"
+                ),
+            }
 
         # - Download original to tmp/album_name$file.ext
         #     and convert to thumbnail

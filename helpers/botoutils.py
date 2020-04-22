@@ -15,7 +15,7 @@ def process_file(
     s3, s3r, s3_obj_key, bucket, logger, CONST
 ):
     is_directory = "." not in s3_obj_key
-    in_album = len(s3_obj_key.split("/")) > 3
+    in_album = len(s3_obj_key.split("/")) > 2
 
     # It's the actual directory OR it's outside of an album.
     # We don't need to do anything.
