@@ -1,5 +1,8 @@
 # lambda-thumbnail-pipeline
 
+## Synchronizing entire directories with `awscli`
+`aws s3 sync <directory> s3://<bucket_name>/images/unprocessed/`
+
 ## Configuring .env
 ```
 # Prefix of files in folders to be processed
@@ -20,4 +23,4 @@ export TEMP=tmp/
 
 #### Running
 1. `source env/bin/activate`
-1. `source .env && env/bin/python3 process_images_lambda.py`
+1. `source .env && python process_images_lambda.py`
