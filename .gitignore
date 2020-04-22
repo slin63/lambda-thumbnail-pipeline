@@ -1,11 +1,11 @@
-tmp/
+tmp/*
 log.txt
 .tabnine_root
 .DS_Store
 */.DS_Store
 */.DS_Store/*
 
-
+lambda/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
