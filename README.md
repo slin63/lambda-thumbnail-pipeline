@@ -9,9 +9,6 @@ from [here](https://aws.amazon.com/premiumsupport/knowledge-center/build-python-
 # Make temp directory
 cp -R . ../temp/ && cd ../temp
 
-# Install dependencies to function project
-pip install -r requirements.txt -t ./
-
 # Add permissions
 chmod -R 755 ./
 
@@ -21,6 +18,8 @@ zip -r ../thumbs-lambda.zip . -x '*.git*' -x 'env/*'
 
 # Verify deployment package
 unzip -l ../thumbs-lambda.zip
+
+cd ../thumbs-lambda && rm -rf ../temp
 ```
 Make sure to use the open-cv-headless layer from [Klayers](https://github.com/keithrozario/Klayers/blob/master/deployments/python3.7/arns/us-east-1.csv).
 `arn:aws:lambda:us-east-1:113088814899:layer:Klayers-python37-opencv-python-headless:12`
@@ -39,9 +38,10 @@ export TEMP=tmp/
 ```
 
 ## process_images.py
-- Reads files from an S3 bucket formatted: `images/unprocessed/<album_name>/files`
-- Creates thumbnails for all files inside `album_name`
-- Adds thumbnails and original files to `images/<album_name>`
+- Reads files from an S3 bucket formatted: `images/unprocessed/<album_name>/file`
+- Creates thumbnails for all files inside `/tmp/album_name$file`
+    - `/tmp/` because it's the only writable directory in AWS Lambda
+- Uploads thumbnails and original files to `images/<album_name>`
 
 #### Running
 1. `source env/bin/activate`
