@@ -22,8 +22,8 @@ zip -r ../thumbs-lambda.zip . -x '*.git*' -x 'env/*'
 # Verify deployment package
 unzip -l ../thumbs-lambda.zip
 ```
-Make sure to use the Pillow 7.1.1 layer from [Klayers](https://github.com/keithrozario/Klayers/blob/master/deployments/python3.7/arns/us-east-1.csv).
-`arn:aws:lambda:us-east-1:113088814899:layer:Klayers-python37-Pillow:10`
+Make sure to use the open-cv-headless layer from [Klayers](https://github.com/keithrozario/Klayers/blob/master/deployments/python3.7/arns/us-east-1.csv).
+`arn:aws:lambda:us-east-1:113088814899:layer:Klayers-python37-opencv-python-headless:12`
 
 ## Configuring .env
 ```
