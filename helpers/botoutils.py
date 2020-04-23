@@ -1,4 +1,5 @@
 import os
+import urllib.parse
 
 from json import dumps
 from helpers import images
@@ -18,6 +19,7 @@ def process_file(
 ):
     is_directory = "." not in s3_obj_key
     in_album = len(s3_obj_key.split("/")) > 2
+    s3_obj_key = urllib.parse.unquote_plus(s3_obj_key)
 
     # It's the actual directory OR it's outside of an album.
     # We don't need to do anything.
@@ -27,10 +29,24 @@ def process_file(
         )
         return True
 
-    album_name, filename, s3path = (
-        *s3_obj_key[len(CONST.UNPROCESSED) :].split("/"),
-        s3_obj_key,
+    split_key = s3_obj_key[len(CONST.UNPROCESSED) :].split(
+        "/"
     )
+    if len(split_key) > 2:
+        logger.info(
+            f"{s3_obj_key} was a nested directory. Deleting."
+        )
+        try:
+            obj = s3.Object(bucket, s3_obj_key)
+            obj.delete()
+        except exceptions.ClientError as exc:
+            if exc.response["Error"]["Code"] == "NoSuchKey":
+                logger.info(
+                    f"{s3path} not found. Message might be stale. Skipping"
+                )
+                return True
+
+    album_name, filename, s3path = (*split_key, s3_obj_key)
     filename_thumbs = f"{filename.split('.')[0]}_thumbs.{filename.split('.')[1]}"
 
     is_image = (
