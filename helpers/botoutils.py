@@ -37,7 +37,7 @@ def process_file(
             f"{s3_obj_key} was a nested directory. Deleting."
         )
         try:
-            obj = s3.Object(bucket, s3_obj_key)
+            obj = s3r.Object(bucket, s3_obj_key)
             obj.delete()
         except exceptions.ClientError as exc:
             if exc.response["Error"]["Code"] == "NoSuchKey":
@@ -56,8 +56,13 @@ def process_file(
     # It's a description. Just move it to images/album_name
     if not is_image:
         out = f"{CONST.IMAGES}{album_name}/{filename}"
+
         try:
-            move_object(s3r, bucket, s3_obj_key, out)
+            if filename[0] != ".":
+                move_object(s3r, bucket, s3_obj_key, out)
+            else:
+                logger.debug(f"Deleting dot file: {filename}")
+                s3r.Object(bucket, s3_obj_key).delete()
         except exceptions.ClientError as exc:
             if exc.response["Error"]["Code"] == "NoSuchKey":
                 logger.info(

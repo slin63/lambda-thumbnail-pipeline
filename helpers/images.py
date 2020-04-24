@@ -14,8 +14,13 @@ def to_thumbnail(path, max_size=500):
     height = int(img.shape[0] * scale_percent)
     dim = (width, height)
 
-    # Preserve exif data
-    exif_bytes = piexif.dump(piexif.load(path))
+    # Preserve exif data, if any
+    was_ok = False
+    try:
+        exif_bytes = piexif.dump(piexif.load(path))
+        was_ok = True
+    except:
+        print(path, " did not have exif data.")
 
     # Resize image
     resized = cv2.resize(
@@ -26,6 +31,7 @@ def to_thumbnail(path, max_size=500):
     cv2.imwrite(path, resized)
 
     # Transfer exif data
-    piexif.insert(exif_bytes, path)
+    if was_ok:
+        piexif.insert(exif_bytes, path)
 
     return True

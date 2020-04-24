@@ -1,7 +1,7 @@
 # lambda-thumbnail-pipeline
 
 ## Synchronizing entire directories with `awscli`
-`aws s3 sync <directory> s3://<bucket_name>/images/unprocessed/`
+`aws s3 sync <directory> s3://<bucket_name>/images/unprocessed/ --metadata Content-Type=image/jpeg`
 
 ## Preparing repository for lambda
 from [here](https://aws.amazon.com/premiumsupport/knowledge-center/build-python-lambda-deployment-package/)
